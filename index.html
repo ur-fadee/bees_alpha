@@ -1,21 +1,52 @@
 <!DOCTYPE html>
-<html id = "page">
+<html id="page">
 <head>
   <meta charset="UTF-8">
   <title>drawing with js</title>
+  <style>
+    /* Optional: making the button look a bit nicer */
+    #playButton {
+      padding: 10px 20px;
+      font-size: 16px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      background-color: #ffd700;
+      border: 2px solid #000;
+      border-radius: 5px;
+      font-weight: bold;
+    }
+  </style>
 </head>
 <body>
 <h1>bdjilka</h1>
-<canvas id = "canvas" width = "400" height = "400"></canvas>
-<audio autoplay loop>
+
+<button id="playButton">🔊 Turn Sound On</button>
+
+<canvas id="canvas" width="400" height="400"></canvas>
+
+<audio id="beeAudio" loop>
   <source src="bee_sound.mp3">
 </audio>
-</body>
-<script src = "https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 <script>
   let canvas = document.getElementById("canvas");
   let ctx = canvas.getContext("2d");
   let page = document.getElementById("page");
+  
+  // Grab the audio and button elements
+  let playButton = document.getElementById("playButton");
+  let beeAudio = document.getElementById("beeAudio");
+
+  // Play audio when the button is clicked
+  playButton.addEventListener("click", function() {
+    beeAudio.play().then(() => {
+      // Successfully playing! Hide the button so it doesn't clutter the page
+      playButton.style.display = "none";
+    }).catch(err => {
+      console.log("Playback error: ", err);
+    });
+  });
 
   let bees = [
     {x: 100, y:100},
@@ -28,7 +59,6 @@
     {x: 100, y:100},
     {x: 100, y:100}
   ]
-
 
   let drawCircle = function (x, y, radius, fillCircle) {
     ctx.beginPath();
@@ -62,7 +92,6 @@
     drawHalfCircle(x, y+6, 8, true)
     drawCircle(x-14, y - 25, 11, false);
     drawCircle(x+14, y-25, 11, false);
-
   }
 
   let update = function (coordinate) {
@@ -86,7 +115,6 @@
   setInterval(function () {
     ctx.clearRect(0,0, canvas.width, canvas.height);
 
-
     bees.forEach(function (bee) {
       drawBee(bee.x, bee.y);
       bee.x = update(bee.x);
@@ -94,9 +122,7 @@
     });
 
     ctx.strokeRect();
-
   }, 30);
-
-
-
 </script>
+</body>
+</html>
