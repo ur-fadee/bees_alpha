@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html id = "page">
+<head>
+  <meta charset="UTF-8">
+  <title>drawing with js</title>
+</head>
+<body>
+<h1>bdjilka</h1>
+<canvas id = "canvas" width = "400" height = "400"></canvas>
+<audio autoplay loop>
+  <source src="bee_sound.mp3">
+</audio>
+</body>
+<script src = "https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<script>
+  let canvas = document.getElementById("canvas");
+  let ctx = canvas.getContext("2d");
+  let page = document.getElementById("page");
+
+  let bees = [
+    {x: 100, y:100},
+    {x: 100, y:100},
+    {x: 100, y:100},
+    {x: 100, y:100},
+    {x: 100, y:100},
+    {x: 100, y:100},
+    {x: 100, y:100},
+    {x: 100, y:100},
+    {x: 100, y:100}
+  ]
+
+
+  let drawCircle = function (x, y, radius, fillCircle) {
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, 2 * Math.PI, false);
+    if (fillCircle) {
+      ctx.fill();
+    } else {
+      ctx.stroke();
+    }
+  }
+
+  let drawHalfCircle = function (x, y, radius, fillCircle) {
+    ctx.beginPath();
+    ctx.arc(x, y, radius, 0, Math.PI, false);
+    if (fillCircle) {
+      ctx.fill();
+    } else {
+      ctx.stroke();
+    }
+  }
+
+  let drawBee = function (x, y) {
+    ctx.lineWidth = 6;
+    ctx.fillStyle = "Gold";
+    ctx.strokeStyle = "Black";
+    drawCircle(x,y, 20, true);
+    drawCircle(x,y, 20, false);
+    ctx.fillStyle = "Black";
+    drawCircle(x-6,y-2,5,true);
+    drawCircle(x+6,y-2,5,true);
+    drawHalfCircle(x, y+6, 8, true)
+    drawCircle(x-14, y - 25, 11, false);
+    drawCircle(x+14, y-25, 11, false);
+
+  }
+
+  let update = function (coordinate) {
+    let offset = Math.random() * 20 - 10;
+    coordinate += offset;
+
+    if (coordinate < 3) {
+      coordinate = 20;
+    } else if (coordinate > 400) {
+      coordinate = 400;
+    }
+
+    return coordinate;
+  }
+
+  bees.forEach(function (bee, index) {
+    bee.x = bee.x + (index * 5);
+    bee.y = bee.y + (index * 5);
+  });
+
+  setInterval(function () {
+    ctx.clearRect(0,0, canvas.width, canvas.height);
+
+
+    bees.forEach(function (bee) {
+      drawBee(bee.x, bee.y);
+      bee.x = update(bee.x);
+      bee.y = update(bee.y);
+    });
+
+    ctx.strokeRect();
+
+  }, 30);
+
+
+
+</script>
